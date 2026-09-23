@@ -22,7 +22,7 @@ fraud > duplicate > failed > pending > posted-with-no-issue.
 Build in progress, following this order:
 
 - [x] 1. Mock data and read/action tools
-- [ ] 2. State schema in code
+- [x] 2. State schema in code
 - [ ] 3. Skeleton graph with stub nodes + router functions (unit-tested before any LLM)
 - [ ] 4. LLM added to intake, lookup matching, customer-facing explanations
 - [ ] 5. Interrupts + checkpointer for OTP, clarifications, action confirmations
@@ -39,6 +39,9 @@ banking-support-agent/
     accounts.json
     transactions.json
     diagnostics.json
+  graph/
+    state.py                # AgentState TypedDict — the full shared state schema
+    config.py                # policy constants (thresholds, retry caps)
 ```
 
 ## Design notes
