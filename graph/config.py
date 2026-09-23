@@ -21,3 +21,9 @@ MAX_FIX_ATTEMPTS = 2  # hard ceiling of distinct failed fix attempts
 # Bounded retry loops
 MAX_LOOKUP_ATTEMPTS = 1  # for not_found / ambiguous transaction lookup
 MAX_PENDING_REROUTES = 1  # for abnormally-stuck pending re-diagnosis loop
+
+# LLM
+# Used only by the three nodes that need language understanding/generation
+# (intake, lookup matching, resolution explanations). Every routing decision
+# stays plain Python and never touches this.
+LLM_MODEL = "claude-sonnet-5"

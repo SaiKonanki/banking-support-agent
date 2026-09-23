@@ -27,6 +27,47 @@ from graph.config import (
 
 
 # ---------------------------------------------------------------------------
+# Live nodes (LLM-backed)
+#
+# These are no longer stubs — they call the LLM wrapper in graph/llm.py.
+# The import is done inside the function body (not at module top) so
+# nodes.py, and the router functions below, stay importable — and
+# node-level unit tests stay mockable — without the anthropic package
+# installed. See graph/llm.py's docstring for the same reasoning.
+# ---------------------------------------------------------------------------
+
+def intake_node(state: "AgentState") -> dict:
+    """Greets the customer and captures why they're calling.
+
+    Calls the LLM (graph/llm.py:classify_intake) to turn the customer's
+    free-text description into a structured call_reason, plus whatever
+    transaction hints (date/location/amount) it can pull out along the way.
+    Those hints are optional — the transaction_lookup node still does the
+    real lookup — this just gives it a head start when the customer
+    volunteers detail up front.
+    """
+    from graph.llm import classify_intake
+
+    description = state.get("customer_description", "")
+    result = classify_intake(description)
+
+    update = {
+        "customer_description": description,
+        "call_reason": result["call_reason"],
+        "agent_notes": [f"intake classified call_reason={result['call_reason']}"],
+    }
+    # Only set these if the LLM actually found something — don't clobber a
+    # value with None just because this particular utterance didn't mention it.
+    if result.get("transaction_date"):
+        update["transaction_date"] = result["transaction_date"]
+    if result.get("transaction_location"):
+        update["transaction_location"] = result["transaction_location"]
+    if result.get("transaction_amount") is not None:
+        update["transaction_amount"] = result["transaction_amount"]
+    return update
+
+
+# ---------------------------------------------------------------------------
 # Stub nodes
 #
 # Each node is a plain function: (state) -> dict of fields to update.
@@ -34,16 +75,6 @@ from graph.config import (
 # These stubs just do the minimum to make state progress realistically
 # enough to unit-test routing.
 # ---------------------------------------------------------------------------
-
-def intake_node(state: "AgentState") -> dict:
-    """Greets the customer and captures why they're calling.
-    Real version: LLM turns free-text into a structured call_reason.
-    """
-    return {
-        "customer_description": state.get("customer_description", ""),
-        "call_reason": state.get("call_reason", "failed"),
-        "agent_notes": ["intake completed"],
-    }
 
 
 def authenticate_node(state: "AgentState") -> dict:

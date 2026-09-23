@@ -24,7 +24,10 @@ Build in progress, following this order:
 - [x] 1. Mock data and read/action tools
 - [x] 2. State schema in code
 - [x] 3. Skeleton graph with stub nodes + router functions (unit-tested before any LLM)
-- [ ] 4. LLM added to intake, lookup matching, customer-facing explanations
+- [~] 4. LLM added to intake, lookup matching, customer-facing explanations
+  - [x] intake — done (graph/llm.py:classify_intake, forced tool-use for structured call_reason)
+  - [ ] lookup matching
+  - [ ] customer-facing resolution explanations
 - [ ] 5. Interrupts + checkpointer for OTP, clarifications, action confirmations
 - [ ] 6. Evaluation suite (scripted scenarios + simulated customer)
 - [ ] 7. Polish: tracing, UI, architecture diagram, eval results
@@ -42,11 +45,26 @@ banking-support-agent/
   graph/
     state.py                # AgentState TypedDict — the full shared state schema
     config.py                # policy constants (thresholds, retry caps)
-    nodes.py                 # stub node functions + router functions (no langgraph dependency)
+    nodes.py                 # node functions + router functions (no langgraph dependency)
     graph.py                 # StateGraph assembly — wires nodes.py into an actual graph
+    llm.py                   # Anthropic API wrapper, used only by LLM-backed nodes
   tests/
     test_routers.py          # unit tests for the three router functions
+    test_intake_node.py      # unit tests for intake_node (mocks the LLM call)
 ```
+
+## Running it for real
+
+`graph/llm.py` reads your API key from the `ANTHROPIC_API_KEY` environment
+variable. Set it before running the graph:
+
+```
+export ANTHROPIC_API_KEY=sk-ant-...
+```
+
+Router and node-logic tests (`tests/`) don't need this — they mock the LLM
+call. You'll only need a real key once you're running the compiled graph
+end to end.
 
 ## Design notes
 
