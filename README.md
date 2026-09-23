@@ -24,10 +24,10 @@ Build in progress, following this order:
 - [x] 1. Mock data and read/action tools
 - [x] 2. State schema in code
 - [x] 3. Skeleton graph with stub nodes + router functions (unit-tested before any LLM)
-- [~] 4. LLM added to intake, lookup matching, customer-facing explanations
+- [x] 4. LLM added to intake, lookup matching, customer-facing explanations
   - [x] intake — done (graph/llm.py:classify_intake, forced tool-use for structured call_reason)
-  - [ ] lookup matching
-  - [ ] customer-facing resolution explanations
+  - [x] lookup matching — done (graph/llm.py:match_transaction, direct ID + LLM fuzzy matching)
+  - [x] resolution explanations — done (four specialized explain functions with dynamic guidance injection)
 - [ ] 5. Interrupts + checkpointer for OTP, clarifications, action confirmations
 - [ ] 6. Evaluation suite (scripted scenarios + simulated customer)
 - [ ] 7. Polish: tracing, UI, architecture diagram, eval results
@@ -44,13 +44,16 @@ banking-support-agent/
     diagnostics.json
   graph/
     state.py                # AgentState TypedDict — the full shared state schema
-    config.py                # policy constants (thresholds, retry caps)
-    nodes.py                 # node functions + router functions (no langgraph dependency)
-    graph.py                 # StateGraph assembly — wires nodes.py into an actual graph
-    llm.py                   # Anthropic API wrapper, used only by LLM-backed nodes
+    config.py               # policy constants (thresholds, retry caps, LLM provider config)
+    nodes.py                # node functions + router functions (no langgraph dependency)
+    graph.py                # StateGraph assembly — wires nodes.py into an actual graph
+    llm.py                  # multi-provider LLM wrapper (Anthropic & OpenAI-compatible open-source)
   tests/
-    test_routers.py          # unit tests for the three router functions
-    test_intake_node.py      # unit tests for intake_node (mocks the LLM call)
+    test_routers.py         # unit tests for the three router functions
+    test_intake_node.py     # unit tests for intake_node (mocks the LLM call)
+    test_lookup_node.py     # unit tests for transaction_lookup_node (mocks the LLM call)
+    test_resolution_nodes.py # unit tests for resolution nodes (policy logic + mock LLM)
+    test_data_nodes.py      # unit tests for data-reading nodes (auth, accounts, diagnostics)
 ```
 
 ## Running it for real

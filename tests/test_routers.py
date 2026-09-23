@@ -11,8 +11,25 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from graph.nodes import route_after_auth, route_after_lookup, route_after_diagnostics
+from graph.nodes import (
+    route_after_intake,
+    route_after_auth,
+    route_after_lookup,
+    route_after_diagnostics,
+)
 from graph.config import MAX_AUTH_ATTEMPTS, MAX_LOOKUP_ATTEMPTS
+
+
+def test_route_after_intake_valid_reason():
+    assert route_after_intake({"call_reason": "failed"}) == "authenticate"
+    assert route_after_intake({"call_reason": "fraud"}) == "authenticate"
+    assert route_after_intake({"call_reason": "duplicate"}) == "authenticate"
+    assert route_after_intake({"call_reason": "pending"}) == "authenticate"
+
+
+def test_route_after_intake_out_of_scope():
+    assert route_after_intake({"call_reason": "out_of_scope"}) == "out_of_scope"
+
 
 
 def test_route_after_auth_success():

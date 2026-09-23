@@ -32,6 +32,9 @@ class AgentState(TypedDict):
     # -- 1. Identity & session --------------------------------------------
     customer_id: str
     session_id: str
+    auth_code_provided: Optional[str]  # the PIN/code the caller gave; compared against
+    # customers.json by authenticate_node. In Step 5 this will be captured via interrupt();
+    # for now it's pre-set in state so tests and manual runs don't need a live interrupt loop.
     authenticated: bool
     auth_attempts: int  # capped at 3 (see review: was 0-retry, now industry-standard 3)
 

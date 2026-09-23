@@ -26,4 +26,13 @@ MAX_PENDING_REROUTES = 1  # for abnormally-stuck pending re-diagnosis loop
 # Used only by the three nodes that need language understanding/generation
 # (intake, lookup matching, resolution explanations). Every routing decision
 # stays plain Python and never touches this.
-LLM_MODEL = "claude-sonnet-5"
+import os
+
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "anthropic")  # "anthropic" or "openai_compatible"
+LLM_MODEL = os.getenv("LLM_MODEL", "claude-sonnet-5" if LLM_PROVIDER == "anthropic" else "llama3.1")
+LLM_BASE_URL = os.getenv("LLM_BASE_URL", None)  # e.g., "http://localhost:11434/v1" for Ollama/vLLM
+LLM_API_KEY = os.getenv(
+    "LLM_API_KEY",
+    os.getenv("ANTHROPIC_API_KEY") if LLM_PROVIDER == "anthropic" else os.getenv("OPENAI_API_KEY", "dummy-key")
+)
+

@@ -25,14 +25,23 @@ from graph.nodes import (
     resolution_pending_node,
     verification_failed_node,
     out_of_scope_node,
+    route_after_intake,
     route_after_auth,
     route_after_lookup,
     route_after_diagnostics,
 )
 
 
-def build_graph():
+def build_graph(checkpointer=None):
+    if checkpointer is None:
+        try:
+            from langgraph.checkpoint.memory import MemorySaver
+            checkpointer = MemorySaver()
+        except ImportError:
+            checkpointer = None
+
     graph = StateGraph(AgentState)
+
 
     graph.add_node("intake", intake_node)
     graph.add_node("authenticate", authenticate_node)
@@ -47,7 +56,15 @@ def build_graph():
     graph.add_node("out_of_scope", out_of_scope_node)
 
     graph.add_edge(START, "intake")
-    graph.add_edge("intake", "authenticate")
+    graph.add_conditional_edges(
+        "intake",
+        route_after_intake,
+        {
+            "authenticate": "authenticate",
+            "out_of_scope": "out_of_scope",
+        },
+    )
+
 
     graph.add_conditional_edges(
         "authenticate",
@@ -89,4 +106,7 @@ def build_graph():
     graph.add_edge("verification_failed", END)
     graph.add_edge("out_of_scope", END)
 
+    if checkpointer is not None:
+        return graph.compile(checkpointer=checkpointer)
     return graph.compile()
+
