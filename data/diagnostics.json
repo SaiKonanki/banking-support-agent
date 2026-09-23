@@ -1,0 +1,548 @@
+[
+  {
+    "transaction_id": "TXN0001",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0002",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0003",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0004",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0005",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0006",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0007",
+    "transaction_status": "failed",
+    "block_reason": "insufficient_funds",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0008",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0009",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "TXN0078"
+  },
+  {
+    "transaction_id": "TXN0010",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0011",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "TXN0076"
+  },
+  {
+    "transaction_id": "TXN0012",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0013",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0014",
+    "transaction_status": "failed",
+    "block_reason": "card_frozen",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0015",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0016",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0017",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0018",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0019",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0020",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0021",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0022",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0023",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0024",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0025",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0026",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0027",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0028",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0029",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": true,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0030",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0031",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0032",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0033",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0034",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0035",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0036",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": true,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0037",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0038",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0039",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0040",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0041",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0042",
+    "transaction_status": "pending",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0043",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0044",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0045",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0046",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": true,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0047",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0048",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0049",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0050",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0051",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0052",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0053",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0054",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0055",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0056",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0057",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0058",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0059",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0060",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0061",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0062",
+    "transaction_status": "pending",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0063",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0064",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0065",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0066",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0067",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0068",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0069",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0070",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "TXN0077"
+  },
+  {
+    "transaction_id": "TXN0071",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0072",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0073",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0074",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0075",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "none"
+  },
+  {
+    "transaction_id": "TXN0076",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "TXN0011"
+  },
+  {
+    "transaction_id": "TXN0077",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "TXN0070"
+  },
+  {
+    "transaction_id": "TXN0078",
+    "transaction_status": "posted",
+    "block_reason": "none",
+    "fraud_flag": false,
+    "duplicate_match_id": "TXN0009"
+  }
+]

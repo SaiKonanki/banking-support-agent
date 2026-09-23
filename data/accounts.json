@@ -1,0 +1,92 @@
+[
+  {
+    "account_id": "ACC001",
+    "customer_id": "CUST001",
+    "account_type": "checking",
+    "branch": "Downtown Branch",
+    "date_opened": "2023-04-12",
+    "active_or_frozen": "active",
+    "balance": 2907.03
+  },
+  {
+    "account_id": "ACC002",
+    "customer_id": "CUST002",
+    "account_type": "checking",
+    "branch": "Northside Branch",
+    "date_opened": "2020-09-10",
+    "active_or_frozen": "frozen",
+    "balance": 7132.8
+  },
+  {
+    "account_id": "ACC003",
+    "customer_id": "CUST002",
+    "account_type": "credit",
+    "branch": "Downtown Branch",
+    "date_opened": "2017-03-21",
+    "active_or_frozen": "active",
+    "balance": 9698.96
+  },
+  {
+    "account_id": "ACC004",
+    "customer_id": "CUST002",
+    "account_type": "savings",
+    "branch": "Online-Only",
+    "date_opened": "2021-11-30",
+    "active_or_frozen": "active",
+    "balance": 3442.78
+  },
+  {
+    "account_id": "ACC005",
+    "customer_id": "CUST003",
+    "account_type": "savings",
+    "branch": "Downtown Branch",
+    "date_opened": "2024-09-09",
+    "active_or_frozen": "active",
+    "balance": 4652.14
+  },
+  {
+    "account_id": "ACC006",
+    "customer_id": "CUST004",
+    "account_type": "savings",
+    "branch": "Downtown Branch",
+    "date_opened": "2017-07-19",
+    "active_or_frozen": "active",
+    "balance": 5594.18
+  },
+  {
+    "account_id": "ACC007",
+    "customer_id": "CUST004",
+    "account_type": "credit",
+    "branch": "Downtown Branch",
+    "date_opened": "2014-10-26",
+    "active_or_frozen": "active",
+    "balance": 11079.2
+  },
+  {
+    "account_id": "ACC008",
+    "customer_id": "CUST005",
+    "account_type": "credit",
+    "branch": "Westlake Branch",
+    "date_opened": "2016-06-05",
+    "active_or_frozen": "active",
+    "balance": 7599.38
+  },
+  {
+    "account_id": "ACC009",
+    "customer_id": "CUST006",
+    "account_type": "credit",
+    "branch": "Downtown Branch",
+    "date_opened": "2025-03-20",
+    "active_or_frozen": "active",
+    "balance": 7985.97
+  },
+  {
+    "account_id": "ACC010",
+    "customer_id": "CUST006",
+    "account_type": "checking",
+    "branch": "Westlake Branch",
+    "date_opened": "2024-11-01",
+    "active_or_frozen": "active",
+    "balance": 10285.51
+  }
+]

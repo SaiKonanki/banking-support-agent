@@ -1,0 +1,44 @@
+[
+  {
+    "customer_id": "CUST001",
+    "name": "Maria Nguyen",
+    "phone_number": "512-555-1001",
+    "location": "Phoenix, AZ",
+    "auth_code": "2824"
+  },
+  {
+    "customer_id": "CUST002",
+    "name": "James Smith",
+    "phone_number": "512-555-1002",
+    "location": "Austin, TX",
+    "auth_code": "5506"
+  },
+  {
+    "customer_id": "CUST003",
+    "name": "Aisha Khan",
+    "phone_number": "512-555-1003",
+    "location": "Dallas, TX",
+    "auth_code": "4657"
+  },
+  {
+    "customer_id": "CUST004",
+    "name": "Wei Chen",
+    "phone_number": "512-555-1004",
+    "location": "Dallas, TX",
+    "auth_code": "2679"
+  },
+  {
+    "customer_id": "CUST005",
+    "name": "Carlos Garcia",
+    "phone_number": "512-555-1005",
+    "location": "Phoenix, AZ",
+    "auth_code": "9935"
+  },
+  {
+    "customer_id": "CUST006",
+    "name": "Priya Reddy",
+    "phone_number": "512-555-1006",
+    "location": "Austin, TX",
+    "auth_code": "7912"
+  }
+]

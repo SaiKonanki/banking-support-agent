@@ -1,0 +1,782 @@
+[
+  {
+    "transaction_id": "TXN0001",
+    "account_id": "ACC001",
+    "date": "2026-08-30",
+    "location": "Dallas, TX",
+    "amount": 206.77,
+    "description": "Chipotle - dining",
+    "merchant": "Chipotle",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0002",
+    "account_id": "ACC001",
+    "date": "2026-08-11",
+    "location": "Houston, TX",
+    "amount": 26.47,
+    "description": "Spotify - subscription",
+    "merchant": "Spotify",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0003",
+    "account_id": "ACC001",
+    "date": "2026-08-12",
+    "location": "Austin, TX",
+    "amount": 421.81,
+    "description": "Best Buy - shopping",
+    "merchant": "Best Buy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0004",
+    "account_id": "ACC001",
+    "date": "2026-08-19",
+    "location": "Phoenix, AZ",
+    "amount": 287.57,
+    "description": "Delta Air Lines - travel",
+    "merchant": "Delta Air Lines",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0005",
+    "account_id": "ACC001",
+    "date": "2026-08-29",
+    "location": "Houston, TX",
+    "amount": 77.71,
+    "description": "Amazon - shopping",
+    "merchant": "Amazon",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0006",
+    "account_id": "ACC001",
+    "date": "2026-08-18",
+    "location": "Dallas, TX",
+    "amount": 289.8,
+    "description": "CVS Pharmacy - health",
+    "merchant": "CVS Pharmacy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0007",
+    "account_id": "ACC001",
+    "date": "2026-09-19",
+    "location": "Dallas, TX",
+    "amount": 24.86,
+    "description": "Planet Fitness - subscription",
+    "merchant": "Planet Fitness",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0008",
+    "account_id": "ACC001",
+    "date": "2026-09-02",
+    "location": "San Antonio, TX",
+    "amount": 19.28,
+    "description": "H-E-B - groceries",
+    "merchant": "H-E-B",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0009",
+    "account_id": "ACC002",
+    "date": "2026-08-17",
+    "location": "Phoenix, AZ",
+    "amount": 98.89,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0010",
+    "account_id": "ACC002",
+    "date": "2026-08-22",
+    "location": "San Antonio, TX",
+    "amount": 19.06,
+    "description": "Spotify - subscription",
+    "merchant": "Spotify",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0011",
+    "account_id": "ACC002",
+    "date": "2026-08-24",
+    "location": "Dallas, TX",
+    "amount": 411.97,
+    "description": "CVS Pharmacy - health",
+    "merchant": "CVS Pharmacy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0012",
+    "account_id": "ACC002",
+    "date": "2026-08-18",
+    "location": "Denver, CO",
+    "amount": 67.14,
+    "description": "Chipotle - dining",
+    "merchant": "Chipotle",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0013",
+    "account_id": "ACC002",
+    "date": "2026-08-26",
+    "location": "Denver, CO",
+    "amount": 337.42,
+    "description": "Chipotle - dining",
+    "merchant": "Chipotle",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0014",
+    "account_id": "ACC002",
+    "date": "2026-09-14",
+    "location": "Denver, CO",
+    "amount": 166.09,
+    "description": "Target - shopping",
+    "merchant": "Target",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0015",
+    "account_id": "ACC002",
+    "date": "2026-09-19",
+    "location": "Austin, TX",
+    "amount": 45.45,
+    "description": "Starbucks - dining",
+    "merchant": "Starbucks",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0016",
+    "account_id": "ACC003",
+    "date": "2026-08-10",
+    "location": "San Antonio, TX",
+    "amount": 16.32,
+    "description": "Planet Fitness - subscription",
+    "merchant": "Planet Fitness",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0017",
+    "account_id": "ACC003",
+    "date": "2026-08-29",
+    "location": "Denver, CO",
+    "amount": 33.27,
+    "description": "Delta Air Lines - travel",
+    "merchant": "Delta Air Lines",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0018",
+    "account_id": "ACC003",
+    "date": "2026-08-18",
+    "location": "Austin, TX",
+    "amount": 240.46,
+    "description": "Starbucks - dining",
+    "merchant": "Starbucks",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0019",
+    "account_id": "ACC003",
+    "date": "2026-08-10",
+    "location": "Denver, CO",
+    "amount": 45.48,
+    "description": "Planet Fitness - subscription",
+    "merchant": "Planet Fitness",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0020",
+    "account_id": "ACC003",
+    "date": "2026-08-12",
+    "location": "Houston, TX",
+    "amount": 123.74,
+    "description": "Uber - transport",
+    "merchant": "Uber",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0021",
+    "account_id": "ACC003",
+    "date": "2026-09-12",
+    "location": "San Antonio, TX",
+    "amount": 135.61,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0022",
+    "account_id": "ACC004",
+    "date": "2026-09-06",
+    "location": "Denver, CO",
+    "amount": 394.75,
+    "description": "Best Buy - shopping",
+    "merchant": "Best Buy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0023",
+    "account_id": "ACC004",
+    "date": "2026-09-16",
+    "location": "Phoenix, AZ",
+    "amount": 84.5,
+    "description": "Uber - transport",
+    "merchant": "Uber",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0024",
+    "account_id": "ACC004",
+    "date": "2026-08-21",
+    "location": "Denver, CO",
+    "amount": 379.54,
+    "description": "Chipotle - dining",
+    "merchant": "Chipotle",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0025",
+    "account_id": "ACC004",
+    "date": "2026-09-12",
+    "location": "Denver, CO",
+    "amount": 73.01,
+    "description": "Amazon - shopping",
+    "merchant": "Amazon",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0026",
+    "account_id": "ACC004",
+    "date": "2026-09-22",
+    "location": "Denver, CO",
+    "amount": 415.48,
+    "description": "Uber - transport",
+    "merchant": "Uber",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0027",
+    "account_id": "ACC005",
+    "date": "2026-08-30",
+    "location": "Houston, TX",
+    "amount": 13.67,
+    "description": "Starbucks - dining",
+    "merchant": "Starbucks",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0028",
+    "account_id": "ACC005",
+    "date": "2026-08-17",
+    "location": "Austin, TX",
+    "amount": 30.78,
+    "description": "Amazon - shopping",
+    "merchant": "Amazon",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0029",
+    "account_id": "ACC005",
+    "date": "2026-09-18",
+    "location": "San Antonio, TX",
+    "amount": 330.7,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0030",
+    "account_id": "ACC005",
+    "date": "2026-08-11",
+    "location": "San Antonio, TX",
+    "amount": 60.96,
+    "description": "Uber - transport",
+    "merchant": "Uber",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0031",
+    "account_id": "ACC005",
+    "date": "2026-08-20",
+    "location": "Denver, CO",
+    "amount": 16.59,
+    "description": "AT&T - utilities",
+    "merchant": "AT&T",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0032",
+    "account_id": "ACC005",
+    "date": "2026-08-19",
+    "location": "Phoenix, AZ",
+    "amount": 434.14,
+    "description": "Target - shopping",
+    "merchant": "Target",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0033",
+    "account_id": "ACC005",
+    "date": "2026-09-03",
+    "location": "San Antonio, TX",
+    "amount": 94.51,
+    "description": "Best Buy - shopping",
+    "merchant": "Best Buy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0034",
+    "account_id": "ACC006",
+    "date": "2026-08-20",
+    "location": "San Antonio, TX",
+    "amount": 27.42,
+    "description": "Planet Fitness - subscription",
+    "merchant": "Planet Fitness",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0035",
+    "account_id": "ACC006",
+    "date": "2026-09-18",
+    "location": "Houston, TX",
+    "amount": 115.32,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0036",
+    "account_id": "ACC006",
+    "date": "2026-09-08",
+    "location": "Houston, TX",
+    "amount": 266.8,
+    "description": "Whole Foods Market - groceries",
+    "merchant": "Whole Foods Market",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0037",
+    "account_id": "ACC006",
+    "date": "2026-08-13",
+    "location": "Austin, TX",
+    "amount": 8.2,
+    "description": "Amazon - shopping",
+    "merchant": "Amazon",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0038",
+    "account_id": "ACC006",
+    "date": "2026-09-20",
+    "location": "Houston, TX",
+    "amount": 34.99,
+    "description": "Amazon - shopping",
+    "merchant": "Amazon",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0039",
+    "account_id": "ACC006",
+    "date": "2026-09-05",
+    "location": "Phoenix, AZ",
+    "amount": 233.8,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0040",
+    "account_id": "ACC006",
+    "date": "2026-09-14",
+    "location": "Phoenix, AZ",
+    "amount": 100.34,
+    "description": "Starbucks - dining",
+    "merchant": "Starbucks",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0041",
+    "account_id": "ACC006",
+    "date": "2026-08-17",
+    "location": "San Antonio, TX",
+    "amount": 397.66,
+    "description": "CVS Pharmacy - health",
+    "merchant": "CVS Pharmacy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0042",
+    "account_id": "ACC006",
+    "date": "2026-08-27",
+    "location": "Dallas, TX",
+    "amount": 354.16,
+    "description": "Amazon - shopping",
+    "merchant": "Amazon",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0043",
+    "account_id": "ACC006",
+    "date": "2026-08-26",
+    "location": "Houston, TX",
+    "amount": 48.13,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0044",
+    "account_id": "ACC007",
+    "date": "2026-09-19",
+    "location": "Phoenix, AZ",
+    "amount": 212.83,
+    "description": "Target - shopping",
+    "merchant": "Target",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0045",
+    "account_id": "ACC007",
+    "date": "2026-09-16",
+    "location": "Austin, TX",
+    "amount": 59.18,
+    "description": "Planet Fitness - subscription",
+    "merchant": "Planet Fitness",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0046",
+    "account_id": "ACC007",
+    "date": "2026-09-16",
+    "location": "Phoenix, AZ",
+    "amount": 329.06,
+    "description": "Target - shopping",
+    "merchant": "Target",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0047",
+    "account_id": "ACC007",
+    "date": "2026-08-25",
+    "location": "Dallas, TX",
+    "amount": 89.64,
+    "description": "Amazon - shopping",
+    "merchant": "Amazon",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0048",
+    "account_id": "ACC007",
+    "date": "2026-08-24",
+    "location": "Dallas, TX",
+    "amount": 86.65,
+    "description": "Target - shopping",
+    "merchant": "Target",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0049",
+    "account_id": "ACC007",
+    "date": "2026-08-25",
+    "location": "Denver, CO",
+    "amount": 415.85,
+    "description": "H-E-B - groceries",
+    "merchant": "H-E-B",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0050",
+    "account_id": "ACC007",
+    "date": "2026-08-19",
+    "location": "Austin, TX",
+    "amount": 27.51,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0051",
+    "account_id": "ACC007",
+    "date": "2026-09-07",
+    "location": "Dallas, TX",
+    "amount": 417.23,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0052",
+    "account_id": "ACC008",
+    "date": "2026-08-28",
+    "location": "Austin, TX",
+    "amount": 219.2,
+    "description": "Starbucks - dining",
+    "merchant": "Starbucks",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0053",
+    "account_id": "ACC008",
+    "date": "2026-08-29",
+    "location": "Houston, TX",
+    "amount": 27.71,
+    "description": "Netflix - subscription",
+    "merchant": "Netflix",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0054",
+    "account_id": "ACC008",
+    "date": "2026-08-24",
+    "location": "Houston, TX",
+    "amount": 353.91,
+    "description": "CVS Pharmacy - health",
+    "merchant": "CVS Pharmacy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0055",
+    "account_id": "ACC008",
+    "date": "2026-08-18",
+    "location": "Phoenix, AZ",
+    "amount": 314.98,
+    "description": "Target - shopping",
+    "merchant": "Target",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0056",
+    "account_id": "ACC008",
+    "date": "2026-09-10",
+    "location": "Houston, TX",
+    "amount": 221.57,
+    "description": "Best Buy - shopping",
+    "merchant": "Best Buy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0057",
+    "account_id": "ACC008",
+    "date": "2026-08-16",
+    "location": "Phoenix, AZ",
+    "amount": 436.08,
+    "description": "Amazon - shopping",
+    "merchant": "Amazon",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0058",
+    "account_id": "ACC008",
+    "date": "2026-09-02",
+    "location": "Austin, TX",
+    "amount": 11.17,
+    "description": "AT&T - utilities",
+    "merchant": "AT&T",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0059",
+    "account_id": "ACC008",
+    "date": "2026-08-21",
+    "location": "Denver, CO",
+    "amount": 264.96,
+    "description": "Whole Foods Market - groceries",
+    "merchant": "Whole Foods Market",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0060",
+    "account_id": "ACC009",
+    "date": "2026-09-17",
+    "location": "Dallas, TX",
+    "amount": 432.55,
+    "description": "Whole Foods Market - groceries",
+    "merchant": "Whole Foods Market",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0061",
+    "account_id": "ACC009",
+    "date": "2026-08-10",
+    "location": "Dallas, TX",
+    "amount": 269.79,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0062",
+    "account_id": "ACC009",
+    "date": "2026-08-17",
+    "location": "Dallas, TX",
+    "amount": 58.35,
+    "description": "Target - shopping",
+    "merchant": "Target",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0063",
+    "account_id": "ACC009",
+    "date": "2026-08-14",
+    "location": "Austin, TX",
+    "amount": 269.56,
+    "description": "Delta Air Lines - travel",
+    "merchant": "Delta Air Lines",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0064",
+    "account_id": "ACC009",
+    "date": "2026-08-17",
+    "location": "Denver, CO",
+    "amount": 297.53,
+    "description": "Target - shopping",
+    "merchant": "Target",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0065",
+    "account_id": "ACC009",
+    "date": "2026-09-09",
+    "location": "Phoenix, AZ",
+    "amount": 56.6,
+    "description": "Spotify - subscription",
+    "merchant": "Spotify",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0066",
+    "account_id": "ACC010",
+    "date": "2026-08-28",
+    "location": "Dallas, TX",
+    "amount": 20.41,
+    "description": "Spotify - subscription",
+    "merchant": "Spotify",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0067",
+    "account_id": "ACC010",
+    "date": "2026-08-24",
+    "location": "Houston, TX",
+    "amount": 41.57,
+    "description": "Planet Fitness - subscription",
+    "merchant": "Planet Fitness",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0068",
+    "account_id": "ACC010",
+    "date": "2026-09-18",
+    "location": "Austin, TX",
+    "amount": 339.58,
+    "description": "CVS Pharmacy - health",
+    "merchant": "CVS Pharmacy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0069",
+    "account_id": "ACC010",
+    "date": "2026-08-17",
+    "location": "Austin, TX",
+    "amount": 281.42,
+    "description": "Starbucks - dining",
+    "merchant": "Starbucks",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0070",
+    "account_id": "ACC010",
+    "date": "2026-08-21",
+    "location": "Houston, TX",
+    "amount": 244.25,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0071",
+    "account_id": "ACC010",
+    "date": "2026-09-18",
+    "location": "Dallas, TX",
+    "amount": 56.53,
+    "description": "Netflix - subscription",
+    "merchant": "Netflix",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0072",
+    "account_id": "ACC010",
+    "date": "2026-08-25",
+    "location": "Denver, CO",
+    "amount": 22.82,
+    "description": "Spotify - subscription",
+    "merchant": "Spotify",
+    "recurring_flag": true
+  },
+  {
+    "transaction_id": "TXN0073",
+    "account_id": "ACC010",
+    "date": "2026-08-12",
+    "location": "Denver, CO",
+    "amount": 139.62,
+    "description": "Best Buy - shopping",
+    "merchant": "Best Buy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0074",
+    "account_id": "ACC010",
+    "date": "2026-08-18",
+    "location": "Houston, TX",
+    "amount": 302.2,
+    "description": "Whole Foods Market - groceries",
+    "merchant": "Whole Foods Market",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0075",
+    "account_id": "ACC010",
+    "date": "2026-09-14",
+    "location": "Houston, TX",
+    "amount": 300.21,
+    "description": "CVS Pharmacy - health",
+    "merchant": "CVS Pharmacy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0076",
+    "account_id": "ACC002",
+    "date": "2026-08-25",
+    "location": "Dallas, TX",
+    "amount": 411.63,
+    "description": "CVS Pharmacy - health",
+    "merchant": "CVS Pharmacy",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0077",
+    "account_id": "ACC010",
+    "date": "2026-08-22",
+    "location": "Houston, TX",
+    "amount": 244.25,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0078",
+    "account_id": "ACC002",
+    "date": "2026-08-18",
+    "location": "Phoenix, AZ",
+    "amount": 98.89,
+    "description": "Shell Gas Station - gas",
+    "merchant": "Shell Gas Station",
+    "recurring_flag": false
+  }
+]
