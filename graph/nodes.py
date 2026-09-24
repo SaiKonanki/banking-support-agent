@@ -104,6 +104,18 @@ def _load_transactions() -> list[dict]:
     return _load_json("transactions.json")
 
 
+def _interrupt(payload: dict):
+    """Invokes LangGraph's interrupt() to pause execution and prompt the user.
+    Falls back gracefully if langgraph is not installed in the environment.
+    """
+    try:
+        from langgraph.types import interrupt
+        return interrupt(payload)
+    except ImportError:
+        return None
+
+
+
 
 def transaction_lookup_node(state: "AgentState") -> dict:
     """Finds the transaction the customer is calling about.
@@ -218,13 +230,70 @@ def transaction_lookup_node(state: "AgentState") -> dict:
         matched_candidates = [t for t in candidates if t.get("transaction_id") in cand_ids]
         if not matched_candidates:
             matched_candidates = candidates[:3]
-        return {
-            "lookup_status": "ambiguous",
-            "lookup_attempts": attempts,
-            "candidate_transactions": matched_candidates,
-            "agent_notes": [f"ambiguous transaction match: {result.get('reasoning', '')}"],
-            "tool_audit_log": [audit],
-        }
+
+        # 1. Format the numbered choices
+        lines = [
+            f"{i+1}. ${c['amount']:.2f} at {c.get('merchant') or c.get('location')} on {c.get('date')} ({c['transaction_id']})"
+            for i, c in enumerate(matched_candidates)
+        ]
+        prompt = (
+            "I found multiple transactions that match your description:\n"
+            + "\n".join(lines)
+            + "\nPlease reply with the option number (e.g. 1) or transaction ID:"
+        )
+
+        # 2. Pause and wait for user's selection
+        user_selection = _interrupt({
+            "action": "transaction_disambiguation",
+            "prompt": prompt,
+            "candidate_ids": [c["transaction_id"] for c in matched_candidates],
+        })
+
+        # 3. Option A: Parse choice by numeric index (1, 2, ...) or exact ID (TXN0001)
+        chosen = None
+        if user_selection is not None:
+            sel_str = str(user_selection).strip()
+            if sel_str.isdigit():
+                idx = int(sel_str) - 1
+                if 0 <= idx < len(matched_candidates):
+                    chosen = matched_candidates[idx]
+            if not chosen:
+                chosen = next(
+                    (c for c in matched_candidates if c.get("transaction_id", "").upper() == sel_str.upper()),
+                    None,
+                )
+
+        if chosen:
+            disambig_audit = _audit_entry(
+                "transactions_disambiguation",
+                {"selection": str(user_selection), "options_count": len(matched_candidates)},
+                {"resolved_id": chosen["transaction_id"], "status": "found"},
+            )
+            return {
+                "transaction_id": chosen["transaction_id"],
+                "transaction_date": chosen.get("date"),
+                "transaction_location": chosen.get("location"),
+                "transaction_account": chosen.get("account_id"),
+                "transaction_amount": chosen.get("amount"),
+                "lookup_status": "found",
+                "lookup_attempts": attempts,
+                "candidate_transactions": [],
+                "agent_notes": [
+                    f"disambiguation resolved to {chosen['transaction_id']} from selection '{user_selection}'"
+                ],
+                "tool_audit_log": [audit, disambig_audit],
+            }
+        else:
+            return {
+                "lookup_status": "ambiguous",
+                "lookup_attempts": attempts,
+                "candidate_transactions": matched_candidates,
+                "agent_notes": [
+                    f"ambiguous transaction match unresolved (selection='{user_selection}'): {result.get('reasoning', '')}"
+                ],
+                "tool_audit_log": [audit],
+            }
+
 
     else:
         return {
@@ -243,15 +312,7 @@ def transaction_lookup_node(state: "AgentState") -> dict:
 
 
 
-def _interrupt(payload: dict):
-    """Invokes LangGraph's interrupt() to pause execution and prompt the user.
-    Falls back gracefully if langgraph is not installed in the environment.
-    """
-    try:
-        from langgraph.types import interrupt
-        return interrupt(payload)
-    except ImportError:
-        return None
+
 
 
 def authenticate_node(state: "AgentState") -> dict:
@@ -450,36 +511,65 @@ PENDING_GUIDANCE = {
     "abnormal": "This pending charge has been held longer than usual. The team is looking into it and will follow up.",
 }
 
+FRAUD_FREEZE_GUIDANCE = {
+    "frozen": "Confirm that the customer's card has been frozen as a precaution while the fraud team investigates, and that they'll be contacted before it's unfrozen.",
+    "declined": "The customer chose not to freeze their card right now. Do not offer to freeze it again — just confirm the case has been escalated.",
+}
+
 
 def resolution_fraud_node(state: "AgentState") -> dict:
-    """Always escalates. Mentions card freeze as an available option.
+    """Always escalates. Asks the customer to confirm a card freeze first.
 
-    Python decides: always escalate, build case summary.
-    LLM explains: tells the customer what's happening, mentions card freeze option.
+    Python decides: always escalate, and Python — never the LLM — decides
+    card_frozen, based solely on the customer's explicit yes/no from the
+    interrupt. LLM explains: tells the customer what's happening and
+    confirms whatever the freeze outcome actually was.
     """
     from graph.llm import explain_fraud_escalation
 
     description = state.get("customer_description", "")
     amount = state.get("transaction_amount", 0.0)
     merchant = state.get("transaction_location")
+    account_id = state.get("transaction_account") or "your account"
+
+    freeze_response = _interrupt({
+        "action": "card_freeze_confirmation",
+        "prompt": (
+            f"For your protection, would you like me to temporarily freeze the card "
+            f"linked to account {account_id} right now while our fraud team investigates? "
+            "(Reply 'Yes' or 'No')"
+        ),
+    })
+
+    card_frozen = str(freeze_response or "").strip().lower() in ("yes", "y", "freeze")
+
+    freeze_audit = _audit_entry(
+        "freeze_card",
+        {"account_id": account_id},
+        {"card_frozen": card_frozen, "customer_response": str(freeze_response)},
+    )
 
     case_summary = (
         f"Fraud case — TXN: {state.get('transaction_id', 'unknown')}, "
         f"Amount: ${amount:.2f}, Merchant: {merchant or 'unknown'}, "
-        f"Customer: {state.get('customer_id', 'unknown')}"
+        f"Customer: {state.get('customer_id', 'unknown')}, "
+        f"Card frozen: {card_frozen}"
     )
 
-    explanation = explain_fraud_escalation(description, amount, merchant)
+    guidance = FRAUD_FREEZE_GUIDANCE["frozen" if card_frozen else "declined"]
+    explanation = explain_fraud_escalation(description, amount, merchant, guidance)
 
     return {
         "resolution_type": "escalated",
         "resolution_status": "escalated",
         "escalated": True,
+        "card_frozen": card_frozen,
         "case_summary": case_summary,
         "resolution_notes": [
-            "fraud path: escalated to human agent",
+            f"fraud path: escalated to human agent (card_frozen={card_frozen})",
             f"customer explanation: {explanation}",
         ],
+        "tool_audit_log": [freeze_audit],
     }
 
 

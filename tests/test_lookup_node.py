@@ -82,6 +82,81 @@ def test_fuzzy_ambiguous_match():
     assert update["lookup_attempts"] == 1
 
 
+def test_disambiguation_select_by_index():
+    state = {
+        "customer_description": "I have two charges around $200-$300",
+        "accounts": {"ACC001": {}},
+        "lookup_attempts": 0,
+    }
+    fake_match_result = {
+        "match_status": "ambiguous",
+        "matched_transaction_id": None,
+        "candidate_transaction_ids": ["TXN0001", "TXN0004"],
+        "reasoning": "Both TXN0001 ($206.77) and TXN0004 ($287.57) are in this range.",
+    }
+    # Mock match_transaction AND mock _interrupt returning "1" (option 1 -> TXN0001)
+    with patch("graph.llm.match_transaction", return_value=fake_match_result), \
+         patch("graph.nodes._interrupt", return_value="1") as mock_interrupt:
+        update = transaction_lookup_node(state)
+
+    mock_interrupt.assert_called_once()
+    payload = mock_interrupt.call_args[0][0]
+    assert payload["action"] == "transaction_disambiguation"
+    assert "TXN0001" in payload["candidate_ids"]
+    assert "TXN0004" in payload["candidate_ids"]
+
+    assert update["lookup_status"] == "found"
+    assert update["transaction_id"] == "TXN0001"
+    assert update["transaction_amount"] == 206.77
+    assert update["candidate_transactions"] == []
+    assert len(update["tool_audit_log"]) == 2  # matching + disambiguation
+
+
+def test_disambiguation_select_by_id():
+    state = {
+        "customer_description": "I have two charges around $200-$300",
+        "accounts": {"ACC001": {}},
+        "lookup_attempts": 0,
+    }
+    fake_match_result = {
+        "match_status": "ambiguous",
+        "matched_transaction_id": None,
+        "candidate_transaction_ids": ["TXN0001", "TXN0004"],
+        "reasoning": "Both TXN0001 and TXN0004 match.",
+    }
+    # User types exact ID "TXN0004"
+    with patch("graph.llm.match_transaction", return_value=fake_match_result), \
+         patch("graph.nodes._interrupt", return_value="TXN0004"):
+        update = transaction_lookup_node(state)
+
+    assert update["lookup_status"] == "found"
+    assert update["transaction_id"] == "TXN0004"
+    assert update["transaction_amount"] == 287.57
+    assert update["candidate_transactions"] == []
+
+
+def test_disambiguation_invalid_choice():
+    state = {
+        "customer_description": "I have two charges around $200-$300",
+        "accounts": {"ACC001": {}},
+        "lookup_attempts": 0,
+    }
+    fake_match_result = {
+        "match_status": "ambiguous",
+        "matched_transaction_id": None,
+        "candidate_transaction_ids": ["TXN0001", "TXN0004"],
+        "reasoning": "Both TXN0001 and TXN0004 match.",
+    }
+    # User types invalid option number "99"
+    with patch("graph.llm.match_transaction", return_value=fake_match_result), \
+         patch("graph.nodes._interrupt", return_value="99"):
+        update = transaction_lookup_node(state)
+
+    assert update["lookup_status"] == "ambiguous"
+    assert len(update["candidate_transactions"]) == 2
+
+
+
 def test_fuzzy_not_found():
     state = {
         "customer_description": "A flight to London for $3000",

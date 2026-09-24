@@ -28,7 +28,10 @@ Build in progress, following this order:
   - [x] intake — done (graph/llm.py:classify_intake, forced tool-use for structured call_reason)
   - [x] lookup matching — done (graph/llm.py:match_transaction, direct ID + LLM fuzzy matching)
   - [x] resolution explanations — done (four specialized explain functions with dynamic guidance injection)
-- [ ] 5. Interrupts + checkpointer for OTP, clarifications, action confirmations
+- [x] 5. Interrupts + checkpointer for OTP, clarifications, action confirmations
+  - [x] Gate 1: OTP authentication interrupt with attempt countdown
+  - [x] Gate 2: Transaction disambiguation interrupt with index/ID resolution
+  - [x] Gate 3: Card freeze action confirmation interrupt in suspected fraud
 - [ ] 6. Evaluation suite (scripted scenarios + simulated customer)
 - [ ] 7. Polish: tracing, UI, architecture diagram, eval results
 

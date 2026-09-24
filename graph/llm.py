@@ -379,7 +379,7 @@ Rules:
 - Never confirm or deny that fraud actually occurred — that is for the investigator.
 - Never promise a specific refund amount or timeline.
 - Mention that the case has been escalated to a specialist who will follow up.
-- Mention that the customer can request to freeze their card as a precaution.
+- Follow the provided guidance exactly for what to say about the customer's card.
 - Keep your response to 2-4 sentences.
 - Use a calm, reassuring, professional tone."""
 
@@ -388,12 +388,14 @@ def explain_fraud_escalation(
     customer_description: str,
     amount: float,
     merchant: Optional[str],
+    guidance: str,
 ) -> str:
     """Generates a customer-facing explanation for a fraud escalation."""
     context = (
         f"Customer said: {customer_description}\n"
         f"Transaction amount: ${amount:.2f}\n"
-        f"Merchant: {merchant or 'unknown'}"
+        f"Merchant: {merchant or 'unknown'}\n"
+        f"Guidance for this situation: {guidance}"
     )
     return _call_text_llm(_EXPLAIN_FRAUD_SYSTEM_PROMPT, context)
 

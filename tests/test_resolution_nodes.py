@@ -37,17 +37,82 @@ def test_fraud_always_escalates():
         "transaction_amount": 500.0,
         "transaction_location": "Best Buy",
         "transaction_id": "TXN0003",
+        "transaction_account": "ACC001",
         "customer_id": "CUST001",
     }
-    with patch("graph.llm.explain_fraud_escalation", return_value="We've flagged this.") as mock_explain:
+    with patch("graph.nodes._interrupt", return_value="no"), \
+         patch("graph.llm.explain_fraud_escalation", return_value="We've flagged this.") as mock_explain:
         update = resolution_fraud_node(state)
 
-    mock_explain.assert_called_once_with("I see a $500 charge I didn't make", 500.0, "Best Buy")
+    mock_explain.assert_called_once()
+    assert mock_explain.call_args[0][:3] == ("I see a $500 charge I didn't make", 500.0, "Best Buy")
     assert update["resolution_type"] == "escalated"
     assert update["resolution_status"] == "escalated"
     assert update["escalated"] is True
     assert "TXN0003" in update["case_summary"]
     assert "We've flagged this." in update["resolution_notes"][1]
+
+
+def test_fraud_freeze_confirmed():
+    state = {
+        "customer_description": "I see a $500 charge I didn't make",
+        "transaction_amount": 500.0,
+        "transaction_location": "Best Buy",
+        "transaction_id": "TXN0003",
+        "transaction_account": "ACC001",
+        "customer_id": "CUST001",
+    }
+    with patch("graph.nodes._interrupt", return_value="yes") as mock_interrupt, \
+         patch("graph.llm.explain_fraud_escalation", return_value="Your card is frozen.") as mock_explain:
+        update = resolution_fraud_node(state)
+
+    mock_interrupt.assert_called_once()
+    assert mock_interrupt.call_args[0][0]["action"] == "card_freeze_confirmation"
+    assert "ACC001" in mock_interrupt.call_args[0][0]["prompt"]
+
+    assert update["card_frozen"] is True
+    assert "Card frozen: True" in update["case_summary"]
+    assert update["tool_audit_log"][0]["tool"] == "freeze_card"
+    assert update["tool_audit_log"][0]["result"]["card_frozen"] is True
+    # Guidance passed to the LLM should reflect the frozen outcome
+    assert "frozen" in mock_explain.call_args[0][3].lower()
+
+
+def test_fraud_freeze_declined():
+    state = {
+        "customer_description": "I see a $500 charge I didn't make",
+        "transaction_amount": 500.0,
+        "transaction_location": "Best Buy",
+        "transaction_id": "TXN0003",
+        "transaction_account": "ACC001",
+        "customer_id": "CUST001",
+    }
+    with patch("graph.nodes._interrupt", return_value="no"), \
+         patch("graph.llm.explain_fraud_escalation", return_value="Understood, no freeze.") as mock_explain:
+        update = resolution_fraud_node(state)
+
+    assert update["card_frozen"] is False
+    assert "Card frozen: False" in update["case_summary"]
+    assert update["tool_audit_log"][0]["result"]["card_frozen"] is False
+    assert "not" in mock_explain.call_args[0][3].lower() or "declined" not in mock_explain.call_args[0][3].lower()
+
+
+def test_fraud_freeze_no_response_defaults_to_not_frozen():
+    """Standalone/non-interrupt environments (e.g. langgraph not installed)
+    get None back from _interrupt — that must never be treated as consent."""
+    state = {
+        "customer_description": "I see a $500 charge I didn't make",
+        "transaction_amount": 500.0,
+        "transaction_location": "Best Buy",
+        "transaction_id": "TXN0003",
+        "transaction_account": "ACC001",
+        "customer_id": "CUST001",
+    }
+    with patch("graph.nodes._interrupt", return_value=None), \
+         patch("graph.llm.explain_fraud_escalation", return_value="Understood."):
+        update = resolution_fraud_node(state)
+
+    assert update["card_frozen"] is False
 
 
 # ---------------------------------------------------------------------------
