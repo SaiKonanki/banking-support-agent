@@ -143,6 +143,7 @@ def transaction_lookup_node(state: "AgentState") -> dict:
                 "transaction_id": matched["transaction_id"],
                 "transaction_date": matched.get("date"),
                 "transaction_location": matched.get("location"),
+                "transaction_merchant": matched.get("merchant"),
                 "transaction_account": matched.get("account_id"),
                 "transaction_amount": matched.get("amount"),
                 "lookup_status": "found",
@@ -208,6 +209,7 @@ def transaction_lookup_node(state: "AgentState") -> dict:
                 "transaction_id": matched["transaction_id"],
                 "transaction_date": matched.get("date"),
                 "transaction_location": matched.get("location"),
+                "transaction_merchant": matched.get("merchant"),
                 "transaction_account": matched.get("account_id"),
                 "transaction_amount": matched.get("amount"),
                 "lookup_status": "found",
@@ -273,6 +275,7 @@ def transaction_lookup_node(state: "AgentState") -> dict:
                 "transaction_id": chosen["transaction_id"],
                 "transaction_date": chosen.get("date"),
                 "transaction_location": chosen.get("location"),
+                "transaction_merchant": chosen.get("merchant"),
                 "transaction_account": chosen.get("account_id"),
                 "transaction_amount": chosen.get("amount"),
                 "lookup_status": "found",
@@ -529,7 +532,7 @@ def resolution_fraud_node(state: "AgentState") -> dict:
 
     description = state.get("customer_description", "")
     amount = state.get("transaction_amount", 0.0)
-    merchant = state.get("transaction_location")
+    merchant = state.get("transaction_merchant")
     account_id = state.get("transaction_account") or "your account"
 
     freeze_response = _interrupt({
@@ -584,7 +587,7 @@ def resolution_duplicate_node(state: "AgentState") -> dict:
 
     description = state.get("customer_description", "")
     amount = state.get("transaction_amount", 0.0)
-    merchant = state.get("transaction_location")
+    merchant = state.get("transaction_merchant")
     dispute_history = state.get("dispute_history", [])
 
     # Policy decision: auto-resolve only if amount < threshold AND no recent dispute
@@ -627,7 +630,7 @@ def resolution_failed_node(state: "AgentState") -> dict:
 
     description = state.get("customer_description", "")
     amount = state.get("transaction_amount", 0.0)
-    merchant = state.get("transaction_location")
+    merchant = state.get("transaction_merchant")
     block_reason = state.get("block_reason")
     fix_attempts = state.get("fix_attempts", 0) + 1
 
@@ -668,7 +671,7 @@ def resolution_pending_node(state: "AgentState") -> dict:
 
     description = state.get("customer_description", "")
     amount = state.get("transaction_amount", 0.0)
-    merchant = state.get("transaction_location")
+    merchant = state.get("transaction_merchant")
     pending_reroutes = state.get("pending_reroutes", 0)
 
     # Simple heuristic: if this is a reroute (we've been here before), it's abnormal

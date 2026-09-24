@@ -29,6 +29,7 @@ def test_direct_id_match():
     assert update["transaction_id"] == "TXN0001"
     assert update["transaction_account"] == "ACC001"
     assert update["transaction_amount"] == 206.77
+    assert update["transaction_merchant"] == "Chipotle"
     assert update["lookup_attempts"] == 1
     assert "TXN0001 found via direct ID" in update["agent_notes"][0]
 
@@ -54,6 +55,7 @@ def test_fuzzy_exact_match():
     assert update["transaction_id"] == "TXN0003"
     assert update["transaction_amount"] == 421.81
     assert update["transaction_location"] == "Austin, TX"
+    assert update["transaction_merchant"] == "Best Buy"
     assert update["lookup_attempts"] == 1
 
 
@@ -108,6 +110,7 @@ def test_disambiguation_select_by_index():
     assert update["lookup_status"] == "found"
     assert update["transaction_id"] == "TXN0001"
     assert update["transaction_amount"] == 206.77
+    assert update["transaction_merchant"] == "Chipotle"
     assert update["candidate_transactions"] == []
     assert len(update["tool_audit_log"]) == 2  # matching + disambiguation
 

@@ -55,6 +55,7 @@ class AgentState(TypedDict):
     transaction_id: Optional[str]
     transaction_date: Optional[str]
     transaction_location: Optional[str]
+    transaction_merchant: Optional[str]
     transaction_account: Optional[str]
     transaction_amount: Optional[float]
     lookup_status: Literal["found", "not_found", "ambiguous"]

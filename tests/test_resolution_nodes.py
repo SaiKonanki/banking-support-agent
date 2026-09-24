@@ -35,7 +35,7 @@ def test_fraud_always_escalates():
     state = {
         "customer_description": "I see a $500 charge I didn't make",
         "transaction_amount": 500.0,
-        "transaction_location": "Best Buy",
+        "transaction_merchant": "Best Buy",
         "transaction_id": "TXN0003",
         "transaction_account": "ACC001",
         "customer_id": "CUST001",
@@ -57,7 +57,7 @@ def test_fraud_freeze_confirmed():
     state = {
         "customer_description": "I see a $500 charge I didn't make",
         "transaction_amount": 500.0,
-        "transaction_location": "Best Buy",
+        "transaction_merchant": "Best Buy",
         "transaction_id": "TXN0003",
         "transaction_account": "ACC001",
         "customer_id": "CUST001",
@@ -82,7 +82,7 @@ def test_fraud_freeze_declined():
     state = {
         "customer_description": "I see a $500 charge I didn't make",
         "transaction_amount": 500.0,
-        "transaction_location": "Best Buy",
+        "transaction_merchant": "Best Buy",
         "transaction_id": "TXN0003",
         "transaction_account": "ACC001",
         "customer_id": "CUST001",
@@ -103,7 +103,7 @@ def test_fraud_freeze_no_response_defaults_to_not_frozen():
     state = {
         "customer_description": "I see a $500 charge I didn't make",
         "transaction_amount": 500.0,
-        "transaction_location": "Best Buy",
+        "transaction_merchant": "Best Buy",
         "transaction_id": "TXN0003",
         "transaction_account": "ACC001",
         "customer_id": "CUST001",
@@ -123,7 +123,7 @@ def test_duplicate_auto_resolves_small_amount_no_disputes():
     state = {
         "customer_description": "I got charged twice for coffee",
         "transaction_amount": 12.50,  # under $50 threshold
-        "transaction_location": "Starbucks",
+        "transaction_merchant": "Starbucks",
         "dispute_history": [],
     }
     with patch("graph.llm.explain_duplicate_charge", return_value="Refund on the way.") as mock_explain:
@@ -142,7 +142,7 @@ def test_duplicate_escalates_large_amount():
     state = {
         "customer_description": "Duplicate charge for $200",
         "transaction_amount": 200.0,  # over $50 threshold
-        "transaction_location": "Target",
+        "transaction_merchant": "Target",
         "dispute_history": [],
     }
     with patch("graph.llm.explain_duplicate_charge", return_value="A specialist will review."):
@@ -157,7 +157,7 @@ def test_duplicate_escalates_recent_dispute():
     state = {
         "customer_description": "Another duplicate charge",
         "transaction_amount": 10.0,  # under threshold, but has recent dispute
-        "transaction_location": "Amazon",
+        "transaction_merchant": "Amazon",
         "dispute_history": [{"date": "2026-09-01", "amount": 15.0}],
     }
     with patch("graph.llm.explain_duplicate_charge", return_value="A specialist will review."):
@@ -175,7 +175,7 @@ def test_failed_insufficient_funds_guidance():
     state = {
         "customer_description": "My purchase was declined",
         "transaction_amount": 150.0,
-        "transaction_location": "Target",
+        "transaction_merchant": "Target",
         "block_reason": "insufficient_funds",
         "fix_attempts": 0,
     }
@@ -196,7 +196,7 @@ def test_failed_card_frozen_guidance():
     state = {
         "customer_description": "Can't use my card",
         "transaction_amount": 75.0,
-        "transaction_location": "Shell",
+        "transaction_merchant": "Shell",
         "block_reason": "card_frozen",
         "fix_attempts": 0,
     }
@@ -211,7 +211,7 @@ def test_failed_escalates_after_max_fix_attempts():
     state = {
         "customer_description": "Still declined",
         "transaction_amount": 100.0,
-        "transaction_location": "Amazon",
+        "transaction_merchant": "Amazon",
         "block_reason": "system_error",
         "fix_attempts": MAX_FIX_ATTEMPTS - 1,  # one more will hit ceiling
     }
@@ -232,7 +232,7 @@ def test_pending_normal_first_visit():
     state = {
         "customer_description": "My payment is stuck pending",
         "transaction_amount": 50.0,
-        "transaction_location": "Netflix",
+        "transaction_merchant": "Netflix",
         "pending_reroutes": 0,
     }
     with patch("graph.llm.explain_pending_charge", return_value="Standard hold.") as mock_explain:
@@ -249,7 +249,7 @@ def test_pending_abnormal_after_reroute():
     state = {
         "customer_description": "Still pending after a week",
         "transaction_amount": 50.0,
-        "transaction_location": "Netflix",
+        "transaction_merchant": "Netflix",
         "pending_reroutes": 1,
     }
     with patch("graph.llm.explain_pending_charge", return_value="Looking into it.") as mock_explain:
