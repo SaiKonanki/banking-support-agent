@@ -778,5 +778,15 @@
     "description": "Shell Gas Station - gas",
     "merchant": "Shell Gas Station",
     "recurring_flag": false
+  },
+  {
+    "transaction_id": "TXN0079",
+    "account_id": "ACC001",
+    "date": "2026-09-03",
+    "location": "San Antonio, TX",
+    "amount": 19.28,
+    "description": "H-E-B - groceries",
+    "merchant": "H-E-B",
+    "recurring_flag": false
   }
 ]

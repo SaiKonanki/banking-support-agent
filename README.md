@@ -32,7 +32,7 @@ Build in progress, following this order:
   - [x] Gate 1: OTP authentication interrupt with attempt countdown
   - [x] Gate 2: Transaction disambiguation interrupt with index/ID resolution
   - [x] Gate 3: Card freeze action confirmation interrupt in suspected fraud
-- [ ] 6. Evaluation suite (scripted scenarios + simulated customer)
+- [x] 6. Evaluation suite (scripted scenarios + simulated customer) — `eval/`, run with `python3 -m eval.run_eval`
 - [ ] 7. Polish: tracing, UI, architecture diagram, eval results
 
 ## Project structure
@@ -57,20 +57,41 @@ banking-support-agent/
     test_lookup_node.py     # unit tests for transaction_lookup_node (mocks the LLM call)
     test_resolution_nodes.py # unit tests for resolution nodes (policy logic + mock LLM)
     test_data_nodes.py      # unit tests for data-reading nodes (auth, accounts, diagnostics)
+  eval/
+    scenarios.py            # scenario definitions (4 scripted + 1 simulated-customer)
+    simulated_customer.py   # LLM plays the customer for the fraud scenario
+    judge.py                # LLM-as-judge: grades explanations against facts + guardrail rules
+    runner.py                # drives one scenario through the real compiled graph
+    run_eval.py              # entry point — runs every scenario, writes eval/reports/latest.md
 ```
 
 ## Running it for real
 
-`graph/llm.py` reads your API key from the `ANTHROPIC_API_KEY` environment
-variable. Set it before running the graph:
+`graph/llm.py` reads its provider config from `graph/config.py`, which reads
+environment variables (or a git-ignored `.env` in the repo root):
 
 ```
-export ANTHROPIC_API_KEY=sk-ant-...
+LLM_PROVIDER=anthropic
+LLM_API_KEY=sk-ant-...
+```
+
+or, for a free OpenAI-compatible backend like Groq (what this project's own
+`.env` uses for testing):
+
+```
+LLM_PROVIDER=openai_compatible
+LLM_BASE_URL=https://api.groq.com/openai/v1
+LLM_MODEL=openai/gpt-oss-120b
+LLM_API_KEY=gsk_...
 ```
 
 Router and node-logic tests (`tests/`) don't need this — they mock the LLM
-call. You'll only need a real key once you're running the compiled graph
-end to end.
+call and run instantly. The eval suite (`eval/`) and any real end-to-end run
+of the compiled graph do need it, since they make live LLM calls.
+
+```
+python3 -m eval.run_eval
+```
 
 ## Design notes
 

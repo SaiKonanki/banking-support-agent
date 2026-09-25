@@ -53,7 +53,7 @@
     "transaction_status": "posted",
     "block_reason": null,
     "fraud_flag": false,
-    "duplicate_match_id": null
+    "duplicate_match_id": "TXN0079"
   },
   {
     "transaction_id": "TXN0009",
@@ -544,5 +544,12 @@
     "block_reason": null,
     "fraud_flag": false,
     "duplicate_match_id": "TXN0009"
+  },
+  {
+    "transaction_id": "TXN0079",
+    "transaction_status": "posted",
+    "block_reason": null,
+    "fraud_flag": false,
+    "duplicate_match_id": "TXN0008"
   }
 ]

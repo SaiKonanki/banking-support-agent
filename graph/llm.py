@@ -76,7 +76,7 @@ def _call_structured_llm(
         }
         response = client.messages.create(
             model=LLM_MODEL,
-            max_tokens=500,
+            max_tokens=1024,
             system=system_prompt,
             tools=[tool_def],
             tool_choice={"type": "tool", "name": tool_name},
@@ -98,7 +98,7 @@ def _call_structured_llm(
         }
         response = client.chat.completions.create(
             model=LLM_MODEL,
-            max_tokens=500,
+            max_tokens=1024,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_content},
@@ -128,7 +128,7 @@ def _call_text_llm(system_prompt: str, user_content: str) -> str:
     if LLM_PROVIDER == "anthropic":
         response = client.messages.create(
             model=LLM_MODEL,
-            max_tokens=500,
+            max_tokens=1024,
             system=system_prompt,
             messages=[{"role": "user", "content": user_content}],
         )
@@ -140,7 +140,7 @@ def _call_text_llm(system_prompt: str, user_content: str) -> str:
     elif LLM_PROVIDER in ("openai", "openai_compatible"):
         response = client.chat.completions.create(
             model=LLM_MODEL,
-            max_tokens=500,
+            max_tokens=1024,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_content},
