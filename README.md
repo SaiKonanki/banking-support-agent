@@ -63,6 +63,8 @@ banking-support-agent/
     judge.py                # LLM-as-judge: grades explanations against facts + guardrail rules
     runner.py                # drives one scenario through the real compiled graph
     run_eval.py              # entry point — runs every scenario, writes eval/reports/latest.md
+  ui/
+    app.py                   # Streamlit chat interface — talk to the real compiled graph
 ```
 
 ## Running it for real
@@ -92,6 +94,18 @@ of the compiled graph do need it, since they make live LLM calls.
 ```
 python3 -m eval.run_eval
 ```
+
+## Trying it interactively
+
+```
+streamlit run ui/app.py
+```
+
+Pick who you're calling as from the sidebar, then chat — it talks to the real
+compiled graph (real LLM calls, real interrupt/resume gates for OTP,
+disambiguation, and card-freeze confirmation), not a scripted demo. The
+sidebar's "Case details" panel shows what the agent actually decided
+(resolution, escalation, card-freeze outcome, tool audit log) after each call.
 
 ## Design notes
 
