@@ -97,6 +97,31 @@ def test_route_after_diagnostics_posted_clean():
     assert route_after_diagnostics(state) == "out_of_scope"
 
 
+def test_route_after_diagnostics_fraud_claim_without_flag_still_escalates():
+    # Diagnostics found nothing wrong, but the customer's stated reason was
+    # fraud — "not flagged" isn't "confirmed safe," so this still escalates
+    # rather than closing out like other clean/posted-clean calls do.
+    state = {
+        "fraud_flag": False,
+        "duplicate_match_id": None,
+        "transaction_status": "posted",
+        "call_reason": "fraud",
+    }
+    assert route_after_diagnostics(state) == "resolution_fraud"
+
+
+def test_route_after_diagnostics_non_fraud_claim_stays_out_of_scope():
+    # Same clean diagnostics, but the customer wasn't claiming fraud — the
+    # fraud-specific safety net shouldn't apply to duplicate/failed/pending.
+    state = {
+        "fraud_flag": False,
+        "duplicate_match_id": None,
+        "transaction_status": "posted",
+        "call_reason": "duplicate",
+    }
+    assert route_after_diagnostics(state) == "out_of_scope"
+
+
 if __name__ == "__main__":
     tests = [v for k, v in list(globals().items()) if k.startswith("test_")]
     passed, failed = 0, 0

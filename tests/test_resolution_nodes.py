@@ -39,6 +39,7 @@ def test_fraud_always_escalates():
         "transaction_id": "TXN0003",
         "transaction_account": "ACC001",
         "customer_id": "CUST001",
+        "fraud_flag": True,
     }
     with patch("graph.nodes._interrupt", return_value="no"), \
          patch("graph.llm.explain_fraud_escalation", return_value="We've flagged this.") as mock_explain:
@@ -48,6 +49,7 @@ def test_fraud_always_escalates():
     assert mock_explain.call_args[0][:3] == ("I see a $500 charge I didn't make", 500.0, "Best Buy")
     assert update["resolution_type"] == "escalated"
     assert update["resolution_status"] == "escalated"
+    assert "Source: system-flagged" in update["case_summary"]
     assert update["escalated"] is True
     assert "TXN0003" in update["case_summary"]
     assert "We've flagged this." in update["resolution_notes"][1]
@@ -113,6 +115,27 @@ def test_fraud_freeze_no_response_defaults_to_not_frozen():
         update = resolution_fraud_node(state)
 
     assert update["card_frozen"] is False
+
+
+def test_fraud_case_summary_notes_customer_reported_without_flag():
+    # Reached via route_after_diagnostics' fraud-claim safety net (diagnostics
+    # clean, but call_reason was "fraud") — fraud_flag is False here, and the
+    # case_summary must say so plainly for the human reviewer's benefit.
+    state = {
+        "customer_description": "I'm pretty sure this charge isn't mine",
+        "transaction_amount": 269.79,
+        "transaction_merchant": "Shell Gas Station",
+        "transaction_id": "TXN0061",
+        "transaction_account": "ACC010",
+        "customer_id": "CUST006",
+        "fraud_flag": False,
+    }
+    with patch("graph.nodes._interrupt", return_value="no"), \
+         patch("graph.llm.explain_fraud_escalation", return_value="Understood."):
+        update = resolution_fraud_node(state)
+
+    assert "Source: customer-reported, no system flag" in update["case_summary"]
+    assert update["resolution_status"] == "escalated"
 
 
 # ---------------------------------------------------------------------------

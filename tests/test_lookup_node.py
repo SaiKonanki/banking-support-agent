@@ -181,6 +181,58 @@ def test_fuzzy_not_found():
     assert update["lookup_attempts"] == 1
 
 
+def test_not_found_clarification_finds_transaction():
+    state = {
+        "customer_description": "A $300 charge at a gas station I don't recognize",
+        "accounts": {"ACC001": {}},
+        "lookup_attempts": 0,
+    }
+    first_result = {
+        "match_status": "not_found",
+        "matched_transaction_id": None,
+        "candidate_transaction_ids": [],
+        "reasoning": "No transaction close to $300 at a gas station.",
+    }
+    second_result = {
+        "match_status": "exact_match",
+        "matched_transaction_id": "TXN0001",
+        "candidate_transaction_ids": [],
+        "reasoning": "Customer clarified it was actually a $206.77 Chipotle charge.",
+    }
+    with patch("graph.llm.match_transaction", side_effect=[first_result, second_result]) as mock_match, \
+         patch("graph.nodes._interrupt", return_value="Sorry, it was actually Chipotle for $206.77") as mock_interrupt:
+        update = transaction_lookup_node(state)
+
+    mock_interrupt.assert_called_once()
+    assert mock_interrupt.call_args[0][0]["action"] == "lookup_clarification"
+    assert mock_match.call_count == 2
+
+    assert update["lookup_status"] == "found"
+    assert update["transaction_id"] == "TXN0001"
+    assert len(update["tool_audit_log"]) == 2
+
+
+def test_not_found_clarification_still_not_found():
+    state = {
+        "customer_description": "A $300 charge at a gas station I don't recognize",
+        "accounts": {"ACC001": {}},
+        "lookup_attempts": 0,
+    }
+    fake_match_result = {
+        "match_status": "not_found",
+        "matched_transaction_id": None,
+        "candidate_transaction_ids": [],
+        "reasoning": "Still no match.",
+    }
+    with patch("graph.llm.match_transaction", return_value=fake_match_result) as mock_match, \
+         patch("graph.nodes._interrupt", return_value="I really don't remember any more detail"):
+        update = transaction_lookup_node(state)
+
+    assert mock_match.call_count == 2  # initial attempt + one clarification retry
+    assert update["lookup_status"] == "not_found"
+    assert "clarification" in update["agent_notes"][0]
+
+
 def test_empty_candidates_returns_not_found():
     state = {
         "customer_description": "Some purchase",

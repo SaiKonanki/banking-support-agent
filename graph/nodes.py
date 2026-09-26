@@ -104,6 +104,29 @@ def _load_transactions() -> list[dict]:
     return _load_json("transactions.json")
 
 
+def _found_result(matched: dict, attempts: int, note: str, audit_entries: list) -> dict:
+    """State update for a transaction that's been positively identified, however
+    it got resolved (direct ID, LLM match, disambiguation, or a post-clarification
+    retry). Centralized so these fields can't drift out of sync between the
+    different resolution paths again — see the transaction_merchant/
+    transaction_location bug this project already hit once from duplicated
+    versions of this exact dict.
+    """
+    return {
+        "transaction_id": matched["transaction_id"],
+        "transaction_date": matched.get("date"),
+        "transaction_location": matched.get("location"),
+        "transaction_merchant": matched.get("merchant"),
+        "transaction_account": matched.get("account_id"),
+        "transaction_amount": matched.get("amount"),
+        "lookup_status": "found",
+        "lookup_attempts": attempts,
+        "candidate_transactions": [],
+        "agent_notes": [note],
+        "tool_audit_log": audit_entries,
+    }
+
+
 def _interrupt(payload: dict):
     """Invokes LangGraph's interrupt() to pause execution and prompt the user.
     Falls back gracefully if langgraph is not installed in the environment.
@@ -139,19 +162,7 @@ def transaction_lookup_node(state: "AgentState") -> dict:
                 {"transaction_id": direct_id},
                 {"found": True, "method": "direct_id"},
             )
-            return {
-                "transaction_id": matched["transaction_id"],
-                "transaction_date": matched.get("date"),
-                "transaction_location": matched.get("location"),
-                "transaction_merchant": matched.get("merchant"),
-                "transaction_account": matched.get("account_id"),
-                "transaction_amount": matched.get("amount"),
-                "lookup_status": "found",
-                "lookup_attempts": attempts,
-                "candidate_transactions": [],
-                "agent_notes": [f"transaction {direct_id} found via direct ID"],
-                "tool_audit_log": [audit],
-            }
+            return _found_result(matched, attempts, f"transaction {direct_id} found via direct ID", [audit])
 
     # 2. Gather candidates for the customer
     if state.get("candidate_transactions"):
@@ -205,19 +216,11 @@ def transaction_lookup_node(state: "AgentState") -> dict:
         matched_id = result.get("matched_transaction_id")
         matched = next((t for t in candidates if t.get("transaction_id") == matched_id), None)
         if matched:
-            return {
-                "transaction_id": matched["transaction_id"],
-                "transaction_date": matched.get("date"),
-                "transaction_location": matched.get("location"),
-                "transaction_merchant": matched.get("merchant"),
-                "transaction_account": matched.get("account_id"),
-                "transaction_amount": matched.get("amount"),
-                "lookup_status": "found",
-                "lookup_attempts": attempts,
-                "candidate_transactions": [],
-                "agent_notes": [f"transaction {matched_id} matched via LLM: {result.get('reasoning', '')}"],
-                "tool_audit_log": [audit],
-            }
+            return _found_result(
+                matched, attempts,
+                f"transaction {matched_id} matched via LLM: {result.get('reasoning', '')}",
+                [audit],
+            )
         else:
             return {
                 "lookup_status": "not_found",
@@ -271,21 +274,11 @@ def transaction_lookup_node(state: "AgentState") -> dict:
                 {"selection": str(user_selection), "options_count": len(matched_candidates)},
                 {"resolved_id": chosen["transaction_id"], "status": "found"},
             )
-            return {
-                "transaction_id": chosen["transaction_id"],
-                "transaction_date": chosen.get("date"),
-                "transaction_location": chosen.get("location"),
-                "transaction_merchant": chosen.get("merchant"),
-                "transaction_account": chosen.get("account_id"),
-                "transaction_amount": chosen.get("amount"),
-                "lookup_status": "found",
-                "lookup_attempts": attempts,
-                "candidate_transactions": [],
-                "agent_notes": [
-                    f"disambiguation resolved to {chosen['transaction_id']} from selection '{user_selection}'"
-                ],
-                "tool_audit_log": [audit, disambig_audit],
-            }
+            return _found_result(
+                chosen, attempts,
+                f"disambiguation resolved to {chosen['transaction_id']} from selection '{user_selection}'",
+                [audit, disambig_audit],
+            )
         else:
             return {
                 "lookup_status": "ambiguous",
@@ -299,12 +292,57 @@ def transaction_lookup_node(state: "AgentState") -> dict:
 
 
     else:
+        # Gate 4: give the customer one chance to clarify before giving up —
+        # route_after_lookup falls straight to out_of_scope after this, since
+        # MAX_LOOKUP_ATTEMPTS makes the external retry loop a no-op at 1.
+        clarification = _interrupt({
+            "action": "lookup_clarification",
+            "prompt": (
+                "I couldn't find a transaction matching that in your account history. "
+                "Could you give me a bit more detail — the exact date, amount, or "
+                "merchant name?"
+            ),
+        })
+
+        if not clarification:
+            return {
+                "lookup_status": "not_found",
+                "lookup_attempts": attempts,
+                "candidate_transactions": [],
+                "agent_notes": [f"transaction not found: {result.get('reasoning', '')}"],
+                "tool_audit_log": [audit],
+            }
+
+        enriched_description = f"{description} (clarification: {clarification})"
+        retry_result = match_transaction(candidates, enriched_description, hints)
+        retry_status = retry_result.get("match_status", "not_found")
+        retry_audit = _audit_entry(
+            "transactions_matching",
+            {"candidates_count": len(candidates), "hints": hints, "clarification": str(clarification)},
+            {"match_status": retry_status, "matched_id": retry_result.get("matched_transaction_id")},
+        )
+
+        if retry_status == "exact_match":
+            matched_id = retry_result.get("matched_transaction_id")
+            matched = next((t for t in candidates if t.get("transaction_id") == matched_id), None)
+            if matched:
+                return _found_result(
+                    matched, attempts,
+                    f"transaction {matched_id} matched via LLM after clarification: {retry_result.get('reasoning', '')}",
+                    [audit, retry_audit],
+                )
+
+        # Still ambiguous or not_found after one clarification round — hand off
+        # rather than looping clarification requests indefinitely.
         return {
             "lookup_status": "not_found",
             "lookup_attempts": attempts,
             "candidate_transactions": [],
-            "agent_notes": [f"transaction not found: {result.get('reasoning', '')}"],
-            "tool_audit_log": [audit],
+            "agent_notes": [
+                f"transaction still not found after clarification "
+                f"(clarification='{clarification}'): {retry_result.get('reasoning', '')}"
+            ],
+            "tool_audit_log": [audit, retry_audit],
         }
 
 
@@ -534,6 +572,7 @@ def resolution_fraud_node(state: "AgentState") -> dict:
     amount = state.get("transaction_amount", 0.0)
     merchant = state.get("transaction_merchant")
     account_id = state.get("transaction_account") or "your account"
+    fraud_flag = state.get("fraud_flag", False)
 
     freeze_response = _interrupt({
         "action": "card_freeze_confirmation",
@@ -552,11 +591,12 @@ def resolution_fraud_node(state: "AgentState") -> dict:
         {"card_frozen": card_frozen, "customer_response": str(freeze_response)},
     )
 
+    source = "system-flagged" if fraud_flag else "customer-reported, no system flag"
     case_summary = (
         f"Fraud case — TXN: {state.get('transaction_id', 'unknown')}, "
         f"Amount: ${amount:.2f}, Merchant: {merchant or 'unknown'}, "
         f"Customer: {state.get('customer_id', 'unknown')}, "
-        f"Card frozen: {card_frozen}"
+        f"Card frozen: {card_frozen}, Source: {source}"
     )
 
     guidance = FRAUD_FREEZE_GUIDANCE["frozen" if card_frozen else "declined"]
@@ -751,6 +791,16 @@ def route_after_lookup(state: "AgentState") -> str:
 def route_after_diagnostics(state: "AgentState") -> str:
     """Diagnostic evidence overrides the customer's stated call_reason, in
     priority order: fraud > duplicate > failed > pending > posted-clean.
+
+    One deliberate exception at the bottom of that chain: a customer-stated
+    fraud claim still goes to resolution_fraud even when diagnostics come back
+    completely clean. "Not flagged" in a mock diagnostics table isn't the same
+    as "confirmed safe," and a dismissed fraud claim is uniquely high-liability
+    compared to a customer being wrong about a duplicate/failed/pending charge
+    — so fraud gets a human-escalation safety net that the other three call
+    reasons deliberately don't. resolution_fraud_node distinguishes system-
+    flagged vs. customer-reported-only in its case_summary for the human
+    reviewer's benefit.
     """
     if state["fraud_flag"]:
         return "resolution_fraud"
@@ -760,5 +810,8 @@ def route_after_diagnostics(state: "AgentState") -> str:
         return "resolution_failed"
     if state["transaction_status"] == "pending":
         return "resolution_pending"
-    # posted, clean, no flags — nothing to resolve
+    if state.get("call_reason") == "fraud":
+        return "resolution_fraud"
+    # posted, clean, no flags, and the customer wasn't even claiming fraud —
+    # nothing to resolve
     return "out_of_scope"
