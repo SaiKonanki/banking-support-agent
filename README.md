@@ -17,6 +17,73 @@ pipeline, then forks into resolution paths:
 Diagnostic evidence overrides the customer's stated reason, in priority order:
 fraud > duplicate > failed > pending > posted-with-no-issue.
 
+## Architecture
+
+```mermaid
+graph TD
+    start(["Customer calls in"]) --> intake
+
+    subgraph phase1["1 &middot; Intake"]
+        intake["Intake<br/>Classifies call_reason (LLM)"]
+    end
+
+    intake -.->|"not fraud/dup/failed/pending"| out_of_scope
+    intake --> authenticate
+
+    subgraph phase2["2 &middot; Identity Verification"]
+        authenticate["Authenticate &mdash; Gate 1<br/>Verify 4-digit OTP"]
+        verification_failed["Verification Failed<br/>3 wrong attempts"]
+    end
+    authenticate -.->|"retry &le;3"| authenticate
+    authenticate -.->|"3 failed attempts"| verification_failed
+    authenticate -->|authenticated| account_lookup
+
+    subgraph phase3["3 &middot; Account &amp; Transaction Lookup"]
+        account_lookup["Account Lookup<br/>Load accounts, check standing"]
+        transaction_lookup["Transaction Lookup &mdash; Gates 2 &amp; 4<br/>Direct ID / LLM fuzzy match"]
+    end
+    account_lookup --> transaction_lookup
+    transaction_lookup -.->|"retry once"| transaction_lookup
+    transaction_lookup -.->|"still not found"| out_of_scope
+    transaction_lookup -->|found| diagnostics
+
+    subgraph phase4["4 &middot; Diagnostics"]
+        diagnostics["Diagnostics<br/>fraud &gt; duplicate &gt; failed &gt; pending &gt; clean"]
+    end
+    diagnostics -->|"fraud_flag, or clean + customer claims fraud"| resolution_fraud
+    diagnostics -->|duplicate_match_id| resolution_duplicate
+    diagnostics -->|"status = failed"| resolution_failed
+    diagnostics -->|"status = pending"| resolution_pending
+    diagnostics -->|"clean, not fraud-claimed"| out_of_scope
+
+    subgraph phase5["5 &middot; Resolution &mdash; call always ends here"]
+        resolution_fraud["Fraud &mdash; Gate 3<br/>Always escalates"]
+        resolution_duplicate["Duplicate<br/>Auto-refund if &lt;$50"]
+        resolution_failed["Failed<br/>Explains, retries &le;2"]
+        resolution_pending["Pending<br/>Explains the hold"]
+        out_of_scope["Out of Scope<br/>Nothing left to resolve"]
+    end
+
+    classDef resolved fill:#99f6e4,stroke:#0d9488,color:#134e4a
+    classDef unresolved fill:#fecaca,stroke:#dc2626,color:#7f1d1d
+    class resolution_fraud,resolution_duplicate,resolution_failed,resolution_pending resolved
+    class verification_failed,out_of_scope unresolved
+```
+
+Gates are the four points the graph pauses via `interrupt()` and waits for the
+customer: **1** OTP verification, **2** transaction disambiguation, **3**
+card-freeze confirmation, **4** lookup clarification. Teal = a resolution was
+reached (even escalation counts); red = the call ends without one.
+
+This diagram is maintained by hand for readability (phase grouping, gate
+labels, color coding) — it can drift from the code if a node or edge changes
+without updating it here too. The literal ground truth is always whatever
+`build_graph()` actually compiles to; regenerate it any time with:
+
+```bash
+python3 -c "from graph.graph import build_graph; print(build_graph().get_graph().draw_mermaid())"
+```
+
 ## Status
 
 Build in progress, following this order:
@@ -37,7 +104,7 @@ Build in progress, following this order:
 - [~] 7. Polish: tracing, UI, architecture diagram, eval results
   - [x] UI — `ui/app.py`, a Streamlit chat interface against the real compiled graph
   - [x] Tracing — LangSmith, see "Tracing" below
-  - [ ] Architecture diagram
+  - [x] Architecture diagram — see "Architecture" above
   - [ ] Eval-results writeup
 
 ## Project structure
