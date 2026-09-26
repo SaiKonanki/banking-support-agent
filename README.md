@@ -105,7 +105,7 @@ Build in progress, following this order:
   - [x] UI — `ui/app.py`, a Streamlit chat interface against the real compiled graph
   - [x] Tracing — LangSmith, see "Tracing" below
   - [x] Architecture diagram — see "Architecture" above
-  - [ ] Eval-results writeup
+  - [x] Eval-results writeup — see `eval/RESULTS.md`
 
 ## Project structure
 
@@ -166,6 +166,11 @@ of the compiled graph do need it, since they make live LLM calls.
 ```
 python3 -m eval.run_eval
 ```
+
+See [`eval/RESULTS.md`](eval/RESULTS.md) for a write-up of what several real
+runs of this suite actually found — including a recurring LLM-judge false
+positive and how to tell an infrastructure failure (e.g. hitting Groq's free
+rate limit) apart from a real quality problem in a report.
 
 ## Trying it interactively
 
