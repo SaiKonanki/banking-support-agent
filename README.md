@@ -32,8 +32,13 @@ Build in progress, following this order:
   - [x] Gate 1: OTP authentication interrupt with attempt countdown
   - [x] Gate 2: Transaction disambiguation interrupt with index/ID resolution
   - [x] Gate 3: Card freeze action confirmation interrupt in suspected fraud
+  - [x] Gate 4: Lookup clarification interrupt when no transaction matches
 - [x] 6. Evaluation suite (scripted scenarios + simulated customer) — `eval/`, run with `python3 -m eval.run_eval`
-- [ ] 7. Polish: tracing, UI, architecture diagram, eval results
+- [~] 7. Polish: tracing, UI, architecture diagram, eval results
+  - [x] UI — `ui/app.py`, a Streamlit chat interface against the real compiled graph
+  - [x] Tracing — LangSmith, see "Tracing" below
+  - [ ] Architecture diagram
+  - [ ] Eval-results writeup
 
 ## Project structure
 
@@ -106,6 +111,29 @@ compiled graph (real LLM calls, real interrupt/resume gates for OTP,
 disambiguation, and card-freeze confirmation), not a scripted demo. The
 sidebar's "Case details" panel shows what the agent actually decided
 (resolution, escalation, card-freeze outcome, tool audit log) after each call.
+
+## Tracing
+
+[LangSmith](https://smith.langchain.com) gives a visual, node-by-node trace of
+every graph run — every node, every LLM call (full prompt + response, tokens,
+latency), and where each interrupt paused/resumed — without any new logging
+code. It's separate from `tool_audit_log` (which only records the specific
+entries this project's own nodes choose to log, e.g. `customers_lookup`); it
+captures the whole trace automatically.
+
+Enable it by adding to `.env`:
+
+```
+LANGSMITH_TRACING=true
+LANGSMITH_API_KEY=lsv2_...
+LANGSMITH_PROJECT=banking-support-agent
+```
+
+No code changes needed — `build_graph()` picks it up automatically once these
+are set, for any script that loads `.env` (`ui/app.py`, `eval/run_eval.py`, or
+your own). Runs show up at smith.langchain.com under **Tracing** →
+`banking-support-agent`. LangSmith has a free tier for individual use;
+check current limits at smith.langchain.com before relying on it further.
 
 ## Design notes
 
